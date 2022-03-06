@@ -1,4 +1,4 @@
-#Getting started  
+# Getting started  
 1. Initialize terraform
 ```shell
 terraform init
@@ -9,4 +9,10 @@ terraform init
 terraform apply -state india.tfstate -var="location=southindia" -var="resource_group_name=mhddosIndia"
 terraform apply -state korea.tfstate -var="location=koreacentral" -var="resource_group_name=mhddosKorea"
 terraform apply -state japan.tfstate -var="location=japaneast" -var="resource_group_name=mhddosJapan"
+```
+4. Stop attack and destroy VMs
+```shell
+terraform destroy -state india.tfstate
+terraform destroy -state korea.tfstate 
+terraform destroy -state japan.tfstate 
 ```
