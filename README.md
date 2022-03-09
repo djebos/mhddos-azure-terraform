@@ -3,7 +3,7 @@ Here I use Terraform to automate Azure VM deployment which run MHDDOS docker con
 You can deploy VMs to any Azure region, I prefer those that are located in Asia.   
 - Default region - `koreacentral` (Central Korea)
 - Default VM count - `4` (In free Azure subscription it's allowed only 4 vCPUs in a single region)
-- Default VM SKU - `Standard_F1s` (1 vCPU, 1 GiB RAM, accelerated networking - ON, price around 0.05 USD/hour)
+- Default VM SKU - `Standard_F1s` (1 vCPU, 2 GiB RAM, accelerated networking - ON, price around 0.05 USD/hour)
 - Default resource group - `mhddosGroup`  
 
 To change default values you can amend the`variables.tf` file, to customize through terminal:
