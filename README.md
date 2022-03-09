@@ -14,8 +14,12 @@ terraform apply ... -var="<variableName>=<variableValue>"
 # Prerequisites
 
 You must have a Microsoft Azure account, it's better off using a free subscription (200 USD for 30 days).
-Also, installed azure CLI and terraform tools are required. In general, udp/tcp/dns mhddos attacks
-are network intensive so your free subscription will be suspended after a max of 24 hours of active attacks. SYN mhddos attack doesn't require many network resources thus you can use your subscription
+Also, installed azure CLI and terraform tools are required. To install these tools check out the following guides:
+- Azure CLI https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
+- Terraform https://learn.hashicorp.com/tutorials/terraform/install-cli
+
+In general, `udp/tcp/dns` mhddos attacks
+are network intensive so your free subscription will be suspended after around 24 hours of active attacks. SYN mhddos attack doesn't require many network resources thus you can use your subscription
 longer.  
 After your subscription is over you can register a new Microsoft account and apply for a new free Azure
 subscription. The main rule here is to specify different phone number. If you have any other ideas
@@ -57,15 +61,15 @@ terraform destroy -state japan.tfstate
 # Troubleshooting
 Your attack could fail due to numerous reasons: wrong configuration, ip isn't reachable etc. Therefore, you 
 have to connect to your VMs and figure things out. 
-1. Find out the target VM public ip through Azure Portal or using terminal
+1. Find out the target VM's public ip through Azure Portal or using terminal
 ```shell
 terraform output -state <your_state_file>.tfstate instancePublicIPs
 ```
-2. Export a private key to a file:
+2. Export a private key to the file:
 ```shell
 terraform output -raw -state <your_state_file>.tfstate tls_private_key > key.pem
 ```
-3. Add read access:
+3. Add a read access to the key file:
 ```shell
 chmod 400 key.pem
 ```
