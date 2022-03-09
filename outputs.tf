@@ -3,6 +3,12 @@ output "tls_private_key" {
   sensitive = true
 }
 
-output "instanceIp" {
-  value = azurerm_public_ip.myterraformpublicip.*.ip_address
+data "azurerm_public_ip" "vmIps" {
+  count = var.vm_count
+  name                = azurerm_public_ip.myterraformpublicip[count.index].name
+  resource_group_name = azurerm_resource_group.myterraformgroup.name
+}
+
+output "instancePublicIPs" {
+  value = data.azurerm_public_ip.vmIps.*.ip_address
 }
