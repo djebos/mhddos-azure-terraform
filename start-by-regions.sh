@@ -9,12 +9,11 @@ if (( ${#inputArgs[@]} > 0)); then
     regions=(${inputArgs[*]})
 fi
 #validate input regions
-availableRegions=$(az account list-locations --query "[?metadata.regionType=='Physical' && metadata.physicalLocation].name" -o table | tail -n +3)
-
+availableRegions=$(az provider list --query "[?namespace=='Microsoft.Resources'].[resourceTypes[?resourceType=='resourceGroups'].locations[]][][]" | sed '1d;$d' | tr '[:upper:]' '[:lower:]' | tr -d " \t\",")
 for region in "${regions[@]}"; do
   if ! grep -q "^$region$" <<< $availableRegions; then
     echo -e "\u001b[1m\u001b[31;1m Not Supported region $region. Check supported regions listed below:\u001b[0m"
-    az account list-locations --query "[?metadata.regionType=='Physical' && metadata.physicalLocation].{RegionCode:name, RegionName:displayName, Location:metadata.physicalLocation}" -o table
+    echo "$availableRegions"
     exit 1
   fi
 done
