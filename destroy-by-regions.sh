@@ -35,8 +35,8 @@ for region in "${!pidsByRegion[@]}"; do
      if grep -q "Apply complete!" "logs/${region}Destroy.log" ; then
        echo -e "\u001b[1m\u001b[32;1m$region VMs destroy finished, exit code $?. You can find terraform logs here logs/${region}Destroy.log\u001b[0m"
      else
-       echo -e "\u001b[1m\u001b[31;1m'$region' VMs destroy failed, exit code $?.\u001b[0m"
-       cat "logs/${region}Destroy.log"
+       echo -e "\u001b[1m\u001b[31;1m'$region' VMs destroy failed, exit code $?. Check full log here logs/$region.log\u001b[0m"
+       tail -20 "logs/$region.log"
      fi
 done
 

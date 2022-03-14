@@ -34,8 +34,8 @@ for region in "${!pidsByRegion[@]}"; do
      if grep -q "Apply complete!" "logs/$region.log" ; then
        echo -e "\u001b[1m\u001b[32;1m$region VMs creation finished, exit code $?. You can find terraform logs here logs/$region.log"
      else
-       echo -e "\u001b[1m\u001b[31;1m$region VMs creation failed, exit code $?.\u001b[0m"
-       cat "logs/$region.log"
+       echo -e "\u001b[1m\u001b[31;1m$region VMs creation failed, exit code $?. Check full log here logs/$region.log\u001b[0m"
+       tail -20 "logs/$region.log"
      fi
 done
 
