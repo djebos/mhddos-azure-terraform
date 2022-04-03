@@ -134,9 +134,15 @@ linux terminal such as `Cygwin` or `Git Bash`.
 ```shell
 ./start-by-region.sh <region1> ... <regionN>
 ```
+
 In the example below we deploy VMs to 4 regions:
 ```shell
 ./start-by-regions.sh eastus koreacentral southindia japaneast
+```
+
+Example of deployment to all possible regions:
+```shell
+./start-by-region.sh centralus eastasia southeastasia eastus eastus2 westus westus2 northcentralus southcentralus westcentralus northeurope westeurope japaneast japanwest brazilsouth australiasoutheast australiaeast westindia southindia centralindia canadacentral canadaeast uksouth ukwest koreacentral koreasouth francecentral southafricanorth uaenorth australiacentral switzerlandnorth germanywestcentral norwayeast westus3 swedencentral
 ```
 5. Verify after a couple of minutes on azure portal the load of VMs' CPUs, RAM, network. CPU or RAM usage must be around
    100%.  
@@ -188,37 +194,31 @@ terraform destroy -state japan.tfstate -auto-approve
 Your attack could fail due to numerous reasons: wrong configuration, ip isn't reachable etc. Therefore, you have to
 connect to your VMs and figure things out.
 
-1. Refresh current terraform state:
-
-```shell
-terraform refresh -state <your_state_file>.tfstate
-```
-
-2. Find out the target VM's public ip through Azure Portal or using terminal
+1. Find out the target VM's public ip through Azure Portal or using terminal
 
 ```shell
 terraform output -state <your_state_file>.tfstate instancePublicIPs
 ```
 
-3. Export a private key to the file:
+2. Export a private key to the file:
 
 ```shell
 terraform output -raw -state <your_state_file>.tfstate tls_private_key > <regionName>.pem
 ```
 
-4. Add a read access to the key file:
+3. Add a read access to the key file:
 
 ```shell
 chmod 400 <regionName>.pem
 ```
 
-5. Connect via SSH:
+4. Connect via SSH:
 
 ```shell
 ssh -i <regionName>.pem azureuser@<your_vm_IP>
 ```
 
-6. Check a status of the `mhddos` docker container:
+5. Check a status of the `mhddos` docker container:
 
 ```shell
 sudo docker ps
