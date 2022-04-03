@@ -200,37 +200,37 @@ connect to your VMs and figure things out.
 terraform output -state <your_state_file>.tfstate instancePublicIPs
 ```
 
-2 Remove outadeted private key (if exist)
+2. Remove outadeted private key (if exist)
 
 ```shell
 rm -f <regionName>.pem
 ```
 
-2.1  Export a private key to the file:
+3.  Export a private key to the file:
 
 ```shell
 terraform output -raw -state <your_state_file>.tfstate tls_private_key > <regionName>.pem
 ```
 
-3. Add a read access to the key file:
+4. Add a read access to the key file:
 
 ```shell
 chmod 400 <regionName>.pem
 ```
 
-4. Connect via SSH:
+5. Connect via SSH:
 
 ```shell
 ssh -i <regionName>.pem azureuser@<your_vm_IP>
 ```
 
-5. Check a status of the `mhddos` docker container:
+6. Check a status of the `mhddos` docker container:
 
 ```shell
 sudo docker ps
 ```
 
-6. Connect to container terminal
+7. Attach to container terminal
 
 ```shell
 sudo docker attach <container name/id>
