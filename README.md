@@ -200,7 +200,13 @@ connect to your VMs and figure things out.
 terraform output -state <your_state_file>.tfstate instancePublicIPs
 ```
 
-2. Export a private key to the file:
+2 Remove outadeted private key (if exist)
+
+```shell
+rm -f <regionName>.pem
+```
+
+2.1  Export a private key to the file:
 
 ```shell
 terraform output -raw -state <your_state_file>.tfstate tls_private_key > <regionName>.pem
@@ -222,4 +228,10 @@ ssh -i <regionName>.pem azureuser@<your_vm_IP>
 
 ```shell
 sudo docker ps
+```
+
+6. Connect to container terminal
+
+```shell
+sudo docker attach <container name/id>
 ```
