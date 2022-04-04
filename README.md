@@ -233,5 +233,5 @@ sudo docker ps
 7. Attach to container terminal
 
 ```shell
-sudo docker attach <container name/id>
+sudo docker attach <mhddos/mhddosProxy>
 ```
