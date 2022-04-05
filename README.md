@@ -190,8 +190,13 @@ terraform destroy -state japan.tfstate -auto-approve
 ```
 
 # Troubleshooting
+(I). Trouble with azure-cli or terraform installation on your Linux system.
 
-Your attack could fail due to numerous reasons: wrong configuration, ip isn't reachable etc. Therefore, you have to
+This is most likely due to the variaty of Linux distro versions.
+In this way, you should try to find the installation instructions exactly for your version of the Linux distribution.
+Example: https://idroot.us/install-terraform-ubuntu-20-04/
+
+(II). Your attack could fail due to numerous reasons: wrong configuration, ip isn't reachable etc. Therefore, you have to
 connect to your VMs and figure things out.
 
 1. Find out the target VM's public ip through Azure Portal or using terminal
