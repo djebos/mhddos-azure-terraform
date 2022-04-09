@@ -4,3 +4,6 @@
 .terraform
 .terraform.lock.hcl
 logs
+*TfPlan
+*.pem
+plan

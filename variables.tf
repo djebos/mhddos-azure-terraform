@@ -1,12 +1,13 @@
 
-variable "location" {
-  default = "koreacentral"
-  description = "Location where resources will be created"
+variable "locations" {
+  type = set(string)
+  default = ["koreacentral"]
+  description = "Locations where resources will be created"
 }
 
-variable "resource_group_name" {
-  description = "Name of the resource group in which the resources will be created"
-  default     = "mhddosGroup"
+variable "resource_group_name_prefix" {
+  description = "Prefix of the resource group in which the resources will be created"
+  default     = "mhddos"
 }
 
 variable "vm_sku" {

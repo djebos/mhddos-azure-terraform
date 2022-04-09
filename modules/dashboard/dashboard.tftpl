@@ -1,0 +1,43 @@
+${jsonencode({
+    "lenses": {
+      "0": {
+        "order": 0,
+        "parts": {for key, value in parts: key => value}
+        }
+    },
+    "metadata": {
+      "model": {
+        "timeRange": {
+          "value": {
+            "relative": {
+              "duration": 24,
+              "timeUnit": 1
+            }
+          },
+          "type": "MsPortalFx.Composition.Configuration.ValueTypes.TimeRange"
+        },
+        "filterLocale": {
+          "value": "en-us"
+        },
+        "filters": {
+          "value": {
+            "MsPortalFx_TimeRange": {
+              "model": {
+                "format": "utc",
+                "granularity": "auto",
+                "relative": "24h"
+              },
+              "displayCache": {
+                "name": "UTC Time",
+                "value": "Past 24 hours"
+              },
+              "filteredPartIds": [
+                "StartboardPart-MonitorChartPart-6bce2bca-7c3e-43e2-a916-630436cf37a1",
+                "StartboardPart-MonitorChartPart-f5d3f309-5325-401d-a6cc-6ecfd2b3113d"
+              ]
+            }
+          }
+        }
+  }
+}
+})}
